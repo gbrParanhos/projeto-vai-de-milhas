@@ -4,6 +4,10 @@ import * as milesRepository from "../../src/repositories/miles-repository"
 import * as milesCalculatorService from "../../src/services/miles-calculator-service"
 import { faker } from "@faker-js/faker"
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 describe("", () => {
   describe("POST /miles", () => {
     it('should return miles', async () => {
@@ -19,11 +23,11 @@ describe("", () => {
       expect(miles).toBe(fakeNumber)
     })
 
-    it('should return conflict error', async () => {
+    it('should return conflict error', () => {
       jest.spyOn(milesRepository, "findMiles").mockResolvedValueOnce({ id: 1, code: "uuid", miles: 1 })
 
       const trip = TripFactory()
-      const miles = await generateMilesForTrip(trip)
+      const miles = generateMilesForTrip(trip)
 
       expect(miles).rejects.toEqual({
         type: "conflict",
